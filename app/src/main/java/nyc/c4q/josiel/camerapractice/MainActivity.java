@@ -43,25 +43,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.make_meme);
 
         imageView = (ImageView) findViewById(R.id.imageView);
-
         textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
-
         editText1 = (EditText) findViewById(R.id.edit_text1);
         editText2 = (EditText) findViewById(R.id.edit_text2);
-
         load = (Button) findViewById(R.id.load);
         save = (Button) findViewById(R.id.save);
         share = (Button) findViewById(R.id.share);
-
         go = (Button) findViewById(R.id.go);
-
         save.setEnabled(false);
         share.setEnabled(false);
 
         load.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View view) {
                 loadImagefromGallery(view);
@@ -94,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
                 editText1.setText("");
                 editText2.setText("");
-
             }
         });
     }
@@ -106,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
-
     }
 
 
@@ -168,9 +159,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(intent, "Share via "));
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No sharing app found.", Toast.LENGTH_SHORT).show();
-
         }
-
     }
 
 
