@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#000000"
     android:orientation="vertical">
 
 
@@ -15,19 +16,26 @@
             android:id="@+id/edit_text1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Top Text" />
+            android:background="#000000"
+            android:hint="Top Text"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff" />
 
         <EditText
             android:id="@+id/edit_text2"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Bottom Text" />
+            android:background="#000000"
+            android:hint="Bottom Text"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff" />
 
         <Button
             android:id="@+id/go"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TRY" />
+            android:text="MEME" />
     </LinearLayout>
 
 
@@ -45,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+
             android:text="SAVE" />
 
         <Button
@@ -78,6 +87,7 @@
 
         <TextView
             android:id="@+id/textView1"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"

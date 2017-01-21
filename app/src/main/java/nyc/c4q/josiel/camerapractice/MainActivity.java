@@ -1,12 +1,8 @@
 package nyc.c4q.josiel.camerapractice;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.Inet4Address;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST = 1;
     private static final int RESULT_LOAD_IMAGE = 2;
-
+    String imgDecodableString;
 
     Button load, save, share, go;
     TextView textView1, textView2;
@@ -40,34 +36,11 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     String currentImage = " ";
 
-    TextView textTargetUri;
-    ImageView targetImage;
-
-    /**
-     * Called when the activity is first created.
-     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
-
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
-            }
-
-        } else {
-            // do nothing
-        }
+        setContentView(R.layout.make_meme);
 
         imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -87,10 +60,11 @@ public class MainActivity extends AppCompatActivity {
         share.setEnabled(false);
 
         load.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                loadImagefromGallery(view);
             }
         });
 
@@ -123,22 +97,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
 
-//        Button buttonLoadImage = (Button) findViewById(R.id.loadimage);
-//        textTargetUri = (TextView) findViewById(R.id.targeturi);
-//        targetImage = (ImageView) findViewById(R.id.targetimage);
-//
-//        buttonLoadImage.setOnClickListener(new Button.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View arg0) {
-//                // TODO Auto-generated method stub
-//                Intent intent = new Intent(Intent.ACTION_PICK,
-//                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                startActivityForResult(intent, 0);
-//            }
-//        });
+    public void loadImagefromGallery(View view) {
+        // Create intent to Open Image applications like Gallery, Google Photos
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+
     }
 
 
@@ -208,38 +176,39 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            // When an Image is picked
+            if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
 
-        if (resultCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            save.setEnabled(true);
-            share.setEnabled(false);
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgDecodableString = cursor.getString(columnIndex);
+                cursor.close();
+                ImageView imgView = (ImageView) findViewById(R.id.imageView);
+                // Set the Image in ImageView after decoding the String
+                imgView.setImageBitmap(BitmapFactory
+                        .decodeFile(imgDecodableString));
+                save.setEnabled(true);
+                share.setEnabled(false);
+
+            } else {
+                Toast.makeText(this, "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG)
+                    .show();
         }
     }
-
-
-//        @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        // TODO Auto-generated method stub
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-//            Uri targetUri = data.getData();
-//            textTargetUri.setText(targetUri.toString());
-//            Bitmap bitmap;
-//            try {
-//                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(targetUri));
-//                targetImage.setImageBitmap(bitmap);
-//            } catch (FileNotFoundException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }
