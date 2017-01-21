@@ -87,8 +87,8 @@ public class Demotivational extends AppCompatActivity {
 
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     // Offsets are for centering the TextView on the touch location
-                    v.setX(event.getRawX() - v.getWidth());
-                    v.setY(event.getRawY() - v.getHeight());
+                    v.setX(event.getRawX() - v.getWidth() / 2.0f);
+                    v.setY(event.getRawY() - v.getHeight() / 2.0f);
                 }
                 return true;
             }
