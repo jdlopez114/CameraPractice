@@ -16,8 +16,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,8 +76,38 @@ public class Demotivational extends AppCompatActivity {
                 shareImage(currentImage);
             }
         });
+
         editText1.addTextChangedListener(new TextWatcherClass(textView1, editText1));
         editText2.addTextChangedListener(new TextWatcherClass(textView2, editText2));
+
+        textView1.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    // Offsets are for centering the TextView on the touch location
+                    v.setX(event.getRawX() - v.getWidth());
+                    v.setY(event.getRawY() - v.getHeight());
+                }
+                return true;
+            }
+        });
+
+        textView2.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    // Offsets are for centering the TextView on the touch location
+                    v.setX(event.getRawX() - v.getWidth() / 2.0f);
+                    v.setY(event.getRawY() - v.getHeight() / 2.0f);
+                }
+                return true;
+            }
+        });
+
     }
 
     public void loadImagefromGallery(View view) {
