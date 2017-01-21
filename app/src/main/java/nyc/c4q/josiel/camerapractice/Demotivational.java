@@ -64,8 +64,8 @@ public class Demotivational extends AppCompatActivity {
             public void onClick(View view) {
                 View content = findViewById(R.id.lay);
                 Bitmap bitmap = getScreenShot(content);
-                currentImage = "meme" + System.currentTimeMillis() + "png";
-                store(bitmap, currentImage);
+//                currentImage = "meme" + System.currentTimeMillis() + "png";
+                store(bitmap);
                 share.setEnabled(true);
             }
         });
@@ -143,18 +143,21 @@ public class Demotivational extends AppCompatActivity {
         return bitmap;
     }
 
-    public void store(Bitmap bm, String fileName) {
+    public void store(Bitmap bm) {
         String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/MEME";
         File dir = new File(dirPath);
         if (!dir.exists()) {
             dir.mkdir();
         }
-        File file = new File(dirPath, fileName);
+        File file = new File(dirPath);
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
+//            FileOutputStream fos = new FileOutputStream(file);
+//            bm.compress(Bitmap.CompressFormat.PNG, 100, fos);
+//            fos.flush();
+//            fos.close();
+
+            MediaStore.Images.Media.insertImage(getContentResolver(), bm, "", "");
+
             Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(this, "Error saving.", Toast.LENGTH_SHORT).show();
